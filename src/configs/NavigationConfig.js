@@ -1,5 +1,5 @@
 import {
-  DashboardOutlined, 
+  DashboardOutlined,
   AppstoreOutlined,
   FileTextOutlined,
   PieChartOutlined,
@@ -884,14 +884,6 @@ const componentsNavTree = [
         icon: EnvironmentOutlined,
         breadcrumb: true,
         submenu: [
-          // {
-          //   key: 'components-maps-google',
-          //   path: `${APP_PREFIX_PATH}/components/maps/google-map`,
-          //   title: 'sidenav.maps.google',
-          //   icon: '',
-          //   breadcrumb: true,
-          //   submenu: []
-          // },
           {
             key: 'components-maps-simple',
             path: `${APP_PREFIX_PATH}/components/maps/simple-map`,

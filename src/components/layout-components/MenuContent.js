@@ -1,13 +1,13 @@
-import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, Grid } from 'antd';
-import IntlMessage from '../util-components/IntlMessage';
-import Icon from '../util-components/Icon';
-import navigationConfig from 'configs/NavigationConfig';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useMemo } from "react";
+import { Link } from "react-router-dom";
+import { Menu, Grid } from "antd";
+import IntlMessage from "../util-components/IntlMessage";
+import Icon from "../util-components/Icon";
+import navigationConfig from "configs/NavigationConfig";
+import { useSelector, useDispatch } from "react-redux";
 import { SIDE_NAV_LIGHT, NAV_TYPE_SIDE } from "constants/ThemeConstant";
-import utils from 'utils'
-import { onMobileNavToggle } from 'store/slices/themeSlice';
+import utils from "utils";
+import { onMobileNavToggle } from "store/slices/themeSlice";
 
 const { useBreakpoint } = Grid;
 
@@ -28,49 +28,63 @@ const setDefaultOpen = (key) => {
 	return keyList;
 };
 
-const MenuItem = ({title, icon, path}) => {
-
+const MenuItem = ({ title, icon, path }) => {
 	const dispatch = useDispatch();
 
-	const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
+	const isMobile = !utils.getBreakPoint(useBreakpoint()).includes("lg");
 
 	const closeMobileNav = () => {
 		if (isMobile) {
-			dispatch(onMobileNavToggle(false))
+			dispatch(onMobileNavToggle(false));
 		}
-	}
+	};
 
 	return (
 		<>
-			{icon && <Icon type={icon} /> }
+			{icon && <Icon type={icon} />}
 			<span>{setLocale(title)}</span>
 			{path && <Link onClick={closeMobileNav} to={path} />}
 		</>
-	)
-}
+	);
+};
 
-const getSideNavMenuItem = (navItem) => navItem.map(nav => {
-	return {
-		key: nav.key,
-		label: <MenuItem title={nav.title} {...(nav.isGroupTitle ? {} : {path: nav.path, icon: nav.icon})} />,
-		...(nav.isGroupTitle ? {type: 'group'} : {}),
-		...(nav.submenu.length > 0 ? {children: getSideNavMenuItem(nav.submenu)} : {})
-	}
-})
+const getSideNavMenuItem = (navItem) =>
+	navItem.map((nav) => {
+		return {
+			key: nav.key,
+			label: (
+				<MenuItem
+					title={nav.title}
+					{...(nav.isGroupTitle ? {} : { path: nav.path, icon: nav.icon })}
+				/>
+			),
+			...(nav.isGroupTitle ? { type: "group" } : {}),
+			...(nav.submenu.length > 0
+				? { children: getSideNavMenuItem(nav.submenu) }
+				: {}),
+		};
+	});
 
-const getTopNavMenuItem = (navItem) => navItem.map(nav => {
-	return {
-		key: nav.key,
-		label: <MenuItem title={nav.title} icon={nav.icon} {...(nav.isGroupTitle ? {} : {path: nav.path})} />,
-		...(nav.submenu.length > 0 ? {children: getTopNavMenuItem(nav.submenu)} : {})
-	}
-})
+const getTopNavMenuItem = (navItem) =>
+	navItem.map((nav) => {
+		return {
+			key: nav.key,
+			label: (
+				<MenuItem
+					title={nav.title}
+					icon={nav.icon}
+					{...(nav.isGroupTitle ? {} : { path: nav.path })}
+				/>
+			),
+			...(nav.submenu.length > 0
+				? { children: getTopNavMenuItem(nav.submenu) }
+				: {}),
+		};
+	});
 
 const SideNavContent = (props) => {
-
 	const { routeInfo, hideGroupTitle } = props;
-
-	const sideNavTheme = useSelector(state => state.theme.sideNavTheme);
+	const sideNavTheme = useSelector((state) => state.theme.sideNavTheme);
 
 	const menuItems = useMemo(() => getSideNavMenuItem(navigationConfig), []);
 
@@ -88,14 +102,13 @@ const SideNavContent = (props) => {
 };
 
 const TopNavContent = () => {
+	const topNavColor = useSelector((state) => state.theme.topNavColor);
 
-	const topNavColor = useSelector(state => state.theme.topNavColor);
-
-	const menuItems = useMemo(() => getTopNavMenuItem(navigationConfig), [])
+	const menuItems = useMemo(() => getTopNavMenuItem(navigationConfig), []);
 
 	return (
-		<Menu 
-			mode="horizontal" 
+		<Menu
+			mode="horizontal"
 			style={{ backgroundColor: topNavColor }}
 			items={menuItems}
 		/>

@@ -11,6 +11,7 @@ const store = configureStore({
 			serializableCheck: false,
 		}).concat(middlewares),
 	devTools: process.env.NODE_ENV === 'development',
+
 })
 
 store.asyncReducers = {};
